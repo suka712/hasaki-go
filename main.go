@@ -2,19 +2,24 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"os"
 	"os/exec"
+	"strings"
 )
 
 func main() {
 	fmt.Println("Hello world!")
 
-	command := exec.Command("git", "--no-pager" ,"diff")
+	runCommand("git status")
+}
 
-	output, err := command.Output()
-	if err != nil {
-		log.Fatal(err)
-	}
+func runCommand(line string) {
+	parts := strings.Fields(line)
+	cmd := exec.Command(parts[0], parts[1:]...)
+	
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 
-	fmt.Println(string(output))
+	cmd.Run();
 }
