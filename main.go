@@ -57,5 +57,6 @@ func getDiff() string {
 		fmt.Println("Error getting diff:", err)
 		return ""
 	}
+    
 	return string(out)
 }
