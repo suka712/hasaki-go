@@ -1,14 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 )
 
 func main() {
-	fmt.Println("Hello world!")
-
 	runCmd("git", "add", ".")
 
 	commitMsg := "Auto generated: Made changes to the code."
