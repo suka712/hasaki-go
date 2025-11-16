@@ -15,8 +15,14 @@ func main() {
 		fmt.Println("No file change. No commit made.")
 		return
 	}
-
     fmt.Println(filesChanged)
+
+    diff := getDiff()
+    if len(diff) == 0 {
+        fmt.Println("Empty diff. No commit made.")
+		return
+    }
+    fmt.Println(diff)
 
 	// commitMsg := "Auto generated: Made changes to the code."
 	// runCmd("git", "commit", "-m", commitMsg)
@@ -34,7 +40,7 @@ func getChanges() []string {
 	cmd := exec.Command("git", "diff", "--cached", "--name-only")
 	out, err := cmd.Output()
 	if err != nil {
-		fmt.Println("Error getting changes:", err);
+		fmt.Println("Error getting changed files:", err);
 		return nil
 	}
 
@@ -43,4 +49,14 @@ func getChanges() []string {
 	}
 
 	return strings.Split(strings.TrimSpace(string(out)), "\n")
+}
+
+func getDiff() string {
+    cmd := exec.Command("git", "--no-pager", "diff", "--staged")
+    out, err := cmd.Output()
+    if err != nil {
+        fmt.Println("Error getting diff:", err)
+        return ""
+    }
+    return string(out)
 }
