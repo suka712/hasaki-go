@@ -10,7 +10,6 @@ func main() {
 			fmt.Println("The index we are at is divisible by 2")
 		} else {
 			fmt.Println("The index we are at not divisible by 2")
-			fmt.Println("Test")
 		}
 	}
 }
