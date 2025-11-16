@@ -4,22 +4,21 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 func main() {
 	fmt.Println("Hello world!")
 
-	runCommand("git status")
+	runCmd("git", "add", ".")
+
+	commitMsg := "Auto generated: Made changes to the code."
+	runCmd("git", "commit", "-m", commitMsg)
 }
 
-func runCommand(line string) {
-	parts := strings.Fields(line)
-	cmd := exec.Command(parts[0], parts[1:]...)
-	
+func runCmd(name string, args ...string) {
+	cmd := exec.Command(name, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
-
 	cmd.Run();
 }
