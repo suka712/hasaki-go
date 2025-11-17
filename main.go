@@ -13,7 +13,11 @@ import (
 func main() {
 	runCmd("git", "add", ".")
 
-	filesChanged := getChanges()
+	filesChanged, err := getChanges()
+    if err != nil {
+        fmt.Printf("Error getting file change: %s", err)
+        return
+    }
 	if len(filesChanged) == 0 {
 		fmt.Println("No file change. No commit made.")
 		return
@@ -77,19 +81,18 @@ func runCmd(name string, args ...string) {
 	cmd.Run()
 }
 
-func getChanges() ([]string) {
+func getChanges() ([]string, error) {
 	cmd := exec.Command("git", "diff", "--cached", "--name-only")
 	out, err := cmd.Output()
 	if err != nil {
-		fmt.Println("Error getting changed files:", err)
-		return nil
+		return nil, fmt.Errorf("error getting changed files: %w", err)
 	}
 
 	if strings.TrimSpace(string(out)) == "" {
-		return []string{}
+		return []string{}, nil
 	}
 
-	return strings.Split(strings.TrimSpace(string(out)), "\n")
+	return strings.Split(strings.TrimSpace(string(out)), "\n"), nil
 }
 
 func getDiff() string {
