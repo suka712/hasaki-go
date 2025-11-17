@@ -29,10 +29,16 @@ func main() {
 		return
 	}
 
+    //
+    //
+    // Not really a change. I'm testing the length of the commit message
+    // Can you make like an 8 word of a commit message for me. Make it sound slightly technical
+    //
+
     msg, err := generateMsg(diff)
     check(err, "Error generating message")
     if len(msg) == 0 {
-		fmt.Println("Empty message. No commit made.") // TODO: never seen before, test if possible
+		fmt.Println("Empty message. No commit made.")
     }
 
     fmt.Println(msg)
