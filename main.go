@@ -34,7 +34,7 @@ func main() {
     fmt.Println(msg)
 
 	// commitMsg := "Auto generated: Made changes to the code."
-	// runCmd("git", "commit", "-m", commitMsg)
+	runCmd("git", "commit", "-m", msg)
 }
 
 // ---------------------------Ai msg gen helpers---------------------------
@@ -46,7 +46,7 @@ func generateMsg(diff string) (string, error) {
         Backend: genai.BackendGeminiAPI,
     })
     if err != nil {
-        return "", fmt.Errorf("Error creating client:", err)
+        return "", fmt.Errorf("error creating client: %w", err)
     }
 
     prompt := fmt.Sprintf("Generate a 10 word or less commit message for this diff: %s", diff)
@@ -57,7 +57,7 @@ func generateMsg(diff string) (string, error) {
         nil,
     )
     if err != nil {
-        return "", fmt.Errorf("Error generating message:", err)
+        return "", fmt.Errorf("error generating message: %w", err)
     }
 
     text := resp.Text()
