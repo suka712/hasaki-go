@@ -83,6 +83,7 @@ func drawLogBox(commitMessage string, filesChanged []string) {
 
 // ---------------------------Ai msg gen---------------------------
 func generateMsg(diff string) (string, error) {
+    fmt.Println("Generating commit message...")
     ctx := context.Background()
 
     client, err := genai.NewClient(ctx, &genai.ClientConfig{
