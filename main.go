@@ -15,7 +15,7 @@ func main() {
 
 	filesChanged, err := getChanges()
     if err != nil {
-        fmt.Printf("Error getting file change: %s", err)
+        fmt.Println("Error getting file change:", err)
         return
     }
 	if len(filesChanged) == 0 {
@@ -23,9 +23,13 @@ func main() {
 		return
 	}
 
-	diff := getDiff()
+	diff, err := getDiff()
+    if err != nil {
+		fmt.Println("Error getting diff:", err)
+        return
+    }
 	if len(diff) == 0 {
-		fmt.Println("Empty commit message. No commit made.")
+		fmt.Println("Empty diff. No commit made.")
 		return
 	}
 
@@ -95,13 +99,12 @@ func getChanges() ([]string, error) {
 	return strings.Split(strings.TrimSpace(string(out)), "\n"), nil
 }
 
-func getDiff() string {
+func getDiff() (string, error) {
 	cmd := exec.Command("git", "--no-pager", "diff", "--staged")
 	out, err := cmd.Output()
 	if err != nil {
-		fmt.Println("Error getting diff:", err)
-		return ""
+		return "", fmt.Errorf("error running git diff: %w", err)
 	}
 
-	return string(out)
+	return string(out), nil
 }
