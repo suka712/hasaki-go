@@ -3,44 +3,49 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
+
 	"google.golang.org/genai"
 )
 
 func main() {
-	runCmd("git", "add", ".")
+	err := runCmd("git", "add", ".")
+    check(err, "Error running 'git add .'")
 
 	filesChanged, err := getChanges()
-    if err != nil {
-        fmt.Println("Error getting file change:", err)
-        return
-    }
+    check(err, "Error getting changed files:")
 	if len(filesChanged) == 0 {
 		fmt.Println("No file change. No commit made.")
 		return
 	}
 
 	diff, err := getDiff()
-    if err != nil {
-		fmt.Println("Error getting diff:", err)
-        return
-    }
+    check(err, "Error getting diff:")
 	if len(diff) == 0 {
 		fmt.Println("Empty diff. No commit made.")
 		return
 	}
 
     msg, err := generateMsg(diff)
+    check(err, "Error generating message:")
     if len(msg) == 0 {
-		fmt.Println("Error generating message:", err)
-        return
+		fmt.Println("Empty message. No commit made.")
     }
 
     fmt.Println(msg)
 
-	runCmd("git", "commit", "-m", msg)
+	err = runCmd("git", "commit", "-m", msg)
+    check(err, "Error running 'git add .'")
+}
+
+// ---------------------------Go boilerplate---------------------------
+func check(err error, msg string) {
+    if err != nil {
+        log.Fatalf("%s: %v", msg, err)
+    }
 }
 
 // ---------------------------Ai msg gen helpers---------------------------
@@ -75,12 +80,16 @@ func generateMsg(diff string) (string, error) {
 }
 
 // ---------------------------Shell & Git helpers---------------------------
-func runCmd(name string, args ...string) {
+func runCmd(name string, args ...string) error {
 	cmd := exec.Command(name, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
-	cmd.Run()
+	err := cmd.Run()
+    if err != nil {
+        return fmt.Errorf("error running command '%s': %w", name, err)
+    }
+    return nil
 }
 
 func getChanges() ([]string, error) {
