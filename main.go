@@ -32,7 +32,7 @@ func main() {
     msg, err := generateMsg(diff)
     check(err, "Error generating message")
     if len(msg) == 0 {
-		fmt.Println("Empty message. No commit made.")
+		fmt.Println("Empty message. No commit made.") // TODO: never seen before, test if possible
     }
 
     fmt.Println(msg)
