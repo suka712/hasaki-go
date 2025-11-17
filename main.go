@@ -41,7 +41,6 @@ func main() {
 
     fmt.Println(msg)
 
-	// commitMsg := "Auto generated: Made changes to the code."
 	runCmd("git", "commit", "-m", msg)
 }
 
