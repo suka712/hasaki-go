@@ -33,6 +33,7 @@ func main() {
     check(err, "Error generating message")
     if len(msg) == 0 {
 		fmt.Println("Empty message. No commit made.")
+        return
     }
 
     fmt.Println(msg)
