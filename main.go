@@ -48,7 +48,7 @@ func check(err error, msg string) {
     }
 }
 
-// ---------------------------Ai msg gen helpers---------------------------
+// ---------------------------Ai msg gen---------------------------
 func generateMsg(diff string) (string, error) {
     ctx := context.Background()
 
@@ -79,7 +79,7 @@ func generateMsg(diff string) (string, error) {
     return result, nil
 }
 
-// ---------------------------Shell & Git helpers---------------------------
+// ---------------------------Shell & Git---------------------------
 func runCmd(name string, args ...string) error {
 	cmd := exec.Command(name, args...)
 	cmd.Stdout = os.Stdout
