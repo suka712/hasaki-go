@@ -36,10 +36,9 @@ func main() {
         return
     }
 
-    fmt.Println(msg)
-
 	err = runCmd("git", "commit", "-m", msg)
     check(err, "Error running 'git commit'")
+    drawLogBox(msg, filesChanged)
 }
 
 // ---------------------------Go boilerplate---------------------------
@@ -47,6 +46,39 @@ func check(err error, msg string) {
     if err != nil {
         log.Fatalf("%s: %v", msg, err)
     }
+}
+
+// ---------------------------Drawing log---------------------------
+func drawLogBox(commitMessage string, filesChanged []string) {
+    maxBoxWidth := 60
+    messageLength := maxBoxWidth - 20
+    contentSpace := maxBoxWidth - 4
+
+    if len(commitMessage) > messageLength {
+        commitMessage = commitMessage[:messageLength] + "..."
+    }
+    commitMessagePrint := "Message: " + commitMessage
+
+    filesJoined := strings.Join(filesChanged, ", ")
+    if len(filesJoined) > messageLength {
+        filesJoined = filesJoined[:messageLength] + "..."
+    }
+    fileChangedPrint := "Changed: " + filesJoined
+
+    padLine := func(text string) string {
+        paddingLength := contentSpace - len(text)
+        if paddingLength < 0 {
+            paddingLength = 0
+        }
+        return text + strings.Repeat(" ", paddingLength)
+    }
+
+    horizontalLine := strings.Repeat("─", maxBoxWidth-2)
+
+    fmt.Println("╭" + horizontalLine + "╮")
+    fmt.Printf("│ %s │\n", padLine(commitMessagePrint))
+    fmt.Printf("│ %s │\n", padLine(fileChangedPrint))
+    fmt.Println("╰" + horizontalLine + "╯")
 }
 
 // ---------------------------Ai msg gen---------------------------
