@@ -13,24 +13,24 @@ import (
 
 func main() {
 	err := runCmd("git", "add", ".")
-    check(err, "Error running 'git add'.")
+    check(err, "Error running 'git add'")
 
 	filesChanged, err := getChanges()
-    check(err, "Error getting changed files:")
+    check(err, "Error getting changed files")
 	if len(filesChanged) == 0 {
 		fmt.Println("No file change. No commit made.")
 		return
 	}
 
 	diff, err := getDiff()
-    check(err, "Error getting diff:")
+    check(err, "Error getting diff")
 	if len(diff) == 0 {
 		fmt.Println("Empty diff. No commit made.")
 		return
 	}
 
     msg, err := generateMsg(diff)
-    check(err, "Error generating message:")
+    check(err, "Error generating message")
     if len(msg) == 0 {
 		fmt.Println("Empty message. No commit made.")
     }
@@ -38,7 +38,7 @@ func main() {
     fmt.Println(msg)
 
 	err = runCmd("git", "commit", "-m", msg)
-    check(err, "Error running 'git commit'.")
+    check(err, "Error running 'git commit'")
 }
 
 // ---------------------------Go boilerplate---------------------------
