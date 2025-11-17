@@ -13,7 +13,7 @@ import (
 
 func main() {
 	err := runCmd("git", "add", ".")
-    check(err, "Error running 'git add .'")
+    check(err, "Error running 'git add'.")
 
 	filesChanged, err := getChanges()
     check(err, "Error getting changed files:")
@@ -38,7 +38,7 @@ func main() {
     fmt.Println(msg)
 
 	err = runCmd("git", "commit", "-m", msg)
-    check(err, "Error running 'git add .'")
+    check(err, "Error running 'git commit'.")
 }
 
 // ---------------------------Go boilerplate---------------------------
