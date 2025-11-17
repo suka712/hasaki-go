@@ -13,104 +13,104 @@ import (
 
 func main() {
 	err := runCmd("git", "add", ".")
-    check(err, "Error running 'git add'")
+	check(err, "Error running 'git add'")
 
 	filesChanged, err := getChanges()
-    check(err, "Error getting changed files")
+	check(err, "Error getting changed files")
 	if len(filesChanged) == 0 {
 		fmt.Println("No file change. No commit made.")
 		return
 	}
 
 	diff, err := getDiff()
-    check(err, "Error getting diff")
+	check(err, "Error getting diff")
 	if len(diff) == 0 {
 		fmt.Println("Empty diff. No commit made.")
 		return
 	}
 
-    msg, err := generateMsg(diff)
-    check(err, "Error generating message")
-    if len(msg) == 0 {
+	msg, err := generateMsg(diff)
+	check(err, "Error generating message")
+	if len(msg) == 0 {
 		fmt.Println("Empty message. No commit made.")
-        return
-    }
+		return
+	}
 
 	err = runCmd("git", "commit", "-m", msg)
-    check(err, "Error running 'git commit'")
-    drawLogBox(msg, filesChanged)
+	check(err, "Error running 'git commit'")
+	drawLogBox(msg, filesChanged)
 }
 
 // ---------------------------Go boilerplate---------------------------
 func check(err error, msg string) {
-    if err != nil {
-        log.Fatalf("%s: %v", msg, err)
-    }
+	if err != nil {
+		log.Fatalf("%s: %v", msg, err)
+	}
 }
 
 // ---------------------------Drawing log---------------------------
 func drawLogBox(commitMessage string, filesChanged []string) {
-    maxBoxWidth := 60
-    messageLength := maxBoxWidth - 20
-    contentSpace := maxBoxWidth - 4
+	maxBoxWidth := 60
+	messageLength := maxBoxWidth - 20
+	contentSpace := maxBoxWidth - 4
 
-    if len(commitMessage) > messageLength {
-        commitMessage = commitMessage[:messageLength] + "..."
-    }
-    commitMessagePrint := "Message: " + commitMessage
+	if len(commitMessage) > messageLength {
+		commitMessage = commitMessage[:messageLength] + "..."
+	}
+	commitMessagePrint := "Message: " + commitMessage
 
-    filesJoined := strings.Join(filesChanged, ", ")
-    if len(filesJoined) > messageLength {
-        filesJoined = filesJoined[:messageLength] + "..."
-    }
-    fileChangedPrint := "Changed: " + filesJoined
+	filesJoined := strings.Join(filesChanged, ", ")
+	if len(filesJoined) > messageLength {
+		filesJoined = filesJoined[:messageLength] + "..."
+	}
+	fileChangedPrint := "Changed: " + filesJoined
 
-    padLine := func(text string) string {
-        paddingLength := contentSpace - len(text)
-        if paddingLength < 0 {
-            paddingLength = 0
-        }
-        return text + strings.Repeat(" ", paddingLength)
-    }
+	padLine := func(text string) string {
+		paddingLength := contentSpace - len(text)
+		if paddingLength < 0 {
+			paddingLength = 0
+		}
+		return text + strings.Repeat(" ", paddingLength)
+	}
 
-    horizontalLine := strings.Repeat("─", maxBoxWidth-2)
+	horizontalLine := strings.Repeat("─", maxBoxWidth-2)
 
-    fmt.Println("╭" + horizontalLine + "╮")
-    fmt.Printf("│ %s │\n", padLine(commitMessagePrint))
-    fmt.Printf("│ %s │\n", padLine(fileChangedPrint))
-    fmt.Println("╰" + horizontalLine + "╯")
+	fmt.Println("╭" + horizontalLine + "╮")
+	fmt.Printf("│ %s │\n", padLine(commitMessagePrint))
+	fmt.Printf("│ %s │\n", padLine(fileChangedPrint))
+	fmt.Println("╰" + horizontalLine + "╯")
 }
 
 // ---------------------------Ai msg gen---------------------------
 func generateMsg(diff string) (string, error) {
-    fmt.Println("Generating commit message...")
-    ctx := context.Background()
+	fmt.Println("Generating commit message...")
+	ctx := context.Background()
 
-    client, err := genai.NewClient(ctx, &genai.ClientConfig{
-        APIKey: apiKey,
-        Backend: genai.BackendGeminiAPI,
-    })
-    if err != nil {
-        return "", fmt.Errorf("error creating client: %w", err)
-    }
+	client, err := genai.NewClient(ctx, &genai.ClientConfig{
+		APIKey:  apiKey,
+		Backend: genai.BackendGeminiAPI,
+	})
+	if err != nil {
+		return "", fmt.Errorf("error creating client: %w", err)
+	}
 
-    prompt := fmt.Sprintf("Generate a 10 word or less commit message for this diff: %s", diff)
-    resp, err := client.Models.GenerateContent(
-        ctx,
-        "gemini-2.5-flash",
-        genai.Text(prompt),
-        nil,
-    )
-    if err != nil {
-        return "", fmt.Errorf("error generating message: %w", err)
-    }
+	prompt := fmt.Sprintf("Generate a 10 word or less commit message for this diff: %s", diff)
+	resp, err := client.Models.GenerateContent(
+		ctx,
+		"gemini-2.5-flash",
+		genai.Text(prompt),
+		nil,
+	)
+	if err != nil {
+		return "", fmt.Errorf("error generating message: %w", err)
+	}
 
-    text := resp.Text()
-    result := strings.TrimSpace(text)
-    result = strings.ReplaceAll(result, "\"", "")
-    result = strings.ReplaceAll(result, "\\", "")
+	text := resp.Text()
+	result := strings.TrimSpace(text)
+	result = strings.ReplaceAll(result, "\"", "")
+	result = strings.ReplaceAll(result, "\\", "")
 
-    return result, nil
+	return result, nil
 }
 
 // ---------------------------Shell & Git---------------------------
@@ -120,10 +120,10 @@ func runCmd(name string, args ...string) error {
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	err := cmd.Run()
-    if err != nil {
-        return fmt.Errorf("error running command '%s': %w", name, err)
-    }
-    return nil
+	if err != nil {
+		return fmt.Errorf("error running command '%s': %w", name, err)
+	}
+	return nil
 }
 
 func getChanges() ([]string, error) {
