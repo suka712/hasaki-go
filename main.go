@@ -66,10 +66,7 @@ func drawLogBox(commitMessage string, filesChanged []string) {
 	fileChangedPrint := "Changed: " + filesJoined
 
 	padLine := func(text string) string {
-		paddingLength := contentSpace - len(text)
-		if paddingLength < 0 {
-			paddingLength = 0
-		}
+		paddingLength := max(contentSpace - len(text), 0)
 		return text + strings.Repeat(" ", paddingLength)
 	}
 
