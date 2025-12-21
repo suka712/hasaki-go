@@ -156,3 +156,5 @@ func getDiff() (string, error) {
 
 	return string(out), nil
 }
+
+// To manually test the command
