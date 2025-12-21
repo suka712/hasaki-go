@@ -38,7 +38,7 @@ func main() {
 	if *manualMsg != "" {
 		msg = *manualMsg
 	} else {
-		msg, err := generateMsg(diff)
+		msg, err = generateMsg(diff)
 		check(err, "Error generating message")
 		if len(msg) == 0 {
 			fmt.Println("Empty message. No commit made.")
