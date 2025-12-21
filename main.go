@@ -41,7 +41,7 @@ func main() {
 	drawLogBox(msg, filesChanged)
 }
 
-// ---------------------------Go boilerplate---------------------------
+// ---------------------------Error checking boilerplate---------------------------
 func check(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %v", msg, err)
