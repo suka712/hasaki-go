@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -12,6 +13,9 @@ import (
 )
 
 func main() {
+	manualMsg := flag.String("m", "", "Manual commit message")
+	flag.Parse()
+
 	err := runCmd("git", "add", ".")
 	check(err, "Error running 'git add'")
 
@@ -29,11 +33,17 @@ func main() {
 		return
 	}
 
-	msg, err := generateMsg(diff)
-	check(err, "Error generating message")
-	if len(msg) == 0 {
-		fmt.Println("Empty message. No commit made.")
-		return
+	var msg string
+
+	if *manualMsg != "" {
+		msg = *manualMsg
+	} else {
+		msg, err := generateMsg(diff)
+		check(err, "Error generating message")
+		if len(msg) == 0 {
+			fmt.Println("Empty message. No commit made.")
+			return
+		}
 	}
 
 	err = runCmd("git", "commit", "-m", msg)

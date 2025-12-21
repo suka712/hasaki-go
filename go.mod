@@ -2,7 +2,7 @@ module hasaki-go
 
 go 1.25.4
 
-require google.golang.org/genai v1.35.0
+require google.golang.org/genai v1.40.0
 
 require (
 	cloud.google.com/go v0.116.0 // indirect
