@@ -27,7 +27,6 @@ Generating commit message...
 │ Message: Clarify boilerplate comment.                    │
 │ Changed: main.go                                         │
 ╰──────────────────────────────────────────────────────────╯
-khiem@mcx ~/Repos/hasaki-go ❯ hx -m "Add ability to add manual message."
 ```
 To manually insert your command, run `hx -m "My manual commit message."`
 ```bash
