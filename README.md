@@ -1,5 +1,5 @@
-# Hasaki Go
-An app to automate git commits.
+# Hasaki Go - 刃先五
+A Gemini-powered CLI tool for commit messages and diff analysis.
 
 ## To use the app
 **Step 1:** Run
