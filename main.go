@@ -51,14 +51,12 @@ func main() {
 	drawLogBox(msg, filesChanged)
 }
 
-// ---------------------------Error checking boilerplate---------------------------
 func check(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %v", msg, err)
 	}
 }
 
-// ---------------------------Drawing log---------------------------
 func drawLogBox(commitMessage string, filesChanged []string) {
 	maxBoxWidth := 60
 	messageLength := maxBoxWidth - 20
@@ -88,7 +86,6 @@ func drawLogBox(commitMessage string, filesChanged []string) {
 	fmt.Println("╰" + horizontalLine + "╯")
 }
 
-// ---------------------------Ai msg gen---------------------------
 func generateMsg(diff string) (string, error) {
 	fmt.Println("Generating commit message...")
 	ctx := context.Background()
@@ -120,7 +117,6 @@ func generateMsg(diff string) (string, error) {
 	return result, nil
 }
 
-// ---------------------------Shell & Git---------------------------
 func runCmd(name string, args ...string) error {
 	cmd := exec.Command(name, args...)
 	cmd.Stdout = os.Stdout
